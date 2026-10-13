@@ -1,6 +1,6 @@
 # shortlink
 
-url shortener, simpen url panjang jadi kode 6 karakter. flask + sqlite
+URL shortener. Turns a long URL into a 6-character code. Flask + SQLite.
 
 ```
 python -m venv .venv
@@ -9,31 +9,31 @@ pip install -r requirements.txt
 python app.py
 ```
 
-buka `http://127.0.0.1:5000`
+Open `http://127.0.0.1:5000`.
 
-## endpoint
+## Endpoints
 
 ```
 POST /api/shorten      { "url": "https://..." }
 GET  /api/links
-GET  /api/links/<kode>
-DEL  /api/links/<kode>
-GET  /<kode>           redirect
+GET  /api/links/<code>
+DEL  /api/links/<code>
+GET  /<code>           redirect
 ```
 
-## yang dicek waktunya masukin url
+## Input checks on shorten
 
-- skema harus http atau https
-- maksimal 2048 karakter
-- host lokal sama ip dalam ditolak
-- port harus 1-65535
-- karakter kontrol ditolak
+- scheme must be http or https
+- max 2048 characters
+- localhost and private IPs rejected
+- port must be 1-65535
+- control characters rejected
 
-kodenya pake `secrets`, bukan `random` sama bukan urutan angka, jadi gak bisa ditebak
+Codes come from `secrets`, not `random`, and not sequential integers, so they can't be guessed.
 
-pas nampilin url di halaman pake `html.escape` biar html-nya gak rusak
+URLs are run through `html.escape` before rendering so the page doesn't break.
 
-## tes
+## Test
 
 ```bash
 curl -X POST http://localhost:5000/api/shorten -H "Content-Type: application/json" -d "{\"url\":\"https://www.google.com\"}"
@@ -43,11 +43,11 @@ curl -X POST http://localhost:5000/api/shorten -H "Content-Type: application/jso
 curl -X POST http://localhost:5000/api/shorten -H "Content-Type: application/json" -d "{\"url\":\"http://127.0.0.1/admin\"}"
 ```
 
-yang kedua ditolak
+Second one gets rejected.
 
-## todo
+## Todo
 
-- gak ada user, sapaun bisa liat semua link
-- hapus link cuma lewat api, gak ada di web
-- gak ada expired
-- gak bisa custom kode
+- no user accounts, anyone can list every link
+- delete only via API, no button in the UI
+- no expiry
+- no custom codes
